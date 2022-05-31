@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             current = text.getText().toString();
         }
 
-        if(result){
+        if(result && view.getId() != R.id.btn_per){
             text.setText("");
             current = text.getText().toString();
             result = false;
@@ -185,12 +185,23 @@ public class MainActivity extends AppCompatActivity {
                 result = true;
                 rmZero(Double.toString(total));
                 break;
+
+            case R.id.btn_per:
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                init = false;
+                result = false;
+                rmZero(Double.toString(percent(current)));
+
         }
 
         check();
 
     }
 
+    // 계산
     public void calc(Double value) {
         switch(operator) {
             case '+':
@@ -273,6 +284,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         text.setText(temp + dot);
+    }
+
+    //
+    public double percent(String current) {
+
+        current = current.replaceAll(",", "");
+
+        double n = Double.parseDouble(current);
+
+        return n/100;
     }
 
 }
