@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     private double value;
     private char operator;
     private double total = 0;
+    private boolean init = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,30 +88,83 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_AC:
                 text.setText("0");
                 total = 0;
+                init = true;
                 break;
 
             case R.id.btn_plus:
-                value = Double.parseDouble(current.replaceAll(",", ""));
+                if(init){
+                    total = Double.parseDouble(current.replaceAll(",", ""));
+                    init = false;
+                } else {
+                    value = Double.parseDouble(current.replaceAll(",", ""));
+                    calc(value);
+                }
                 text.setText("");
-                total += value;
                 operator = '+';
+
                 break;
 
             case R.id.btn_min:
-                value = Double.parseDouble(current.replaceAll(",", ""));
+                if(init){
+                    total = Double.parseDouble(current.replaceAll(",", ""));
+                    init = false;
+                } else {
+                    value = Double.parseDouble(current.replaceAll(",", ""));
+                    calc(value);
+                }
                 text.setText("");
-                total -= value;
                 operator = '-';
+                break;
+
+            case R.id.btn_mul:
+                if(init){
+                    total = Double.parseDouble(current.replaceAll(",", ""));
+                    init = false;
+                } else {
+                    value = Double.parseDouble(current.replaceAll(",", ""));
+                    calc(value);
+                }
+                text.setText("");
+                operator = '*';
+                break;
+
+            case R.id.btn_div:
+                if(init){
+                    total = Double.parseDouble(current.replaceAll(",", ""));
+                    init = false;
+                } else {
+                    value = Double.parseDouble(current.replaceAll(",", ""));
+                    calc(value);
+                }
+                text.setText("");
+                operator = '/';
                 break;
 
             case R.id.btn_eq:
                 value = Double.parseDouble(current.replaceAll(",", ""));
                 result(value);
+                init = true;
                 break;
-
         }
 
         check();
+    }
+
+    public void calc(Double value) {
+        switch(operator) {
+            case '+':
+                total += value;
+                break;
+            case '-':
+                total -= value;
+                break;
+            case '*':
+                total *= value;
+                break;
+            case '/':
+                total /= value;
+                break;
+        }
     }
 
     public void result(Double value) {
@@ -120,6 +174,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case '-':
                 total -= value;
+                break;
+            case '*':
+                total *= value;
+                break;
+            case '/':
+                total /= value;
                 break;
 
         }
