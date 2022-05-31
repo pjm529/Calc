@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
                 && view.getId() != R.id.btn_AC
                 && view.getId() != R.id.btn_dot
                 && view.getId() != R.id.btn_eq
-                && view.getId() != R.id.btn_plus) {
+                && view.getId() != R.id.btn_plus
+                && view.getId() != R.id.btn_min
+                && view.getId() != R.id.btn_mul
+                && view.getId() != R.id.btn_div) {
             Toast.makeText(this, "최대 숫자를 넘어섰습니다.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -101,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         check();
     }
 
+    public void result() {
+        text.setText(Double.toString(value1+value2));
+    }
+
+    // 소숫점 확인
     public boolean checkDot(){
         String current = text.getText().toString();
 
@@ -111,28 +119,31 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-    public void result() {
-        text.setText("" + (value1 + value2));
-    }
+
     // 숫자 변환기
     public void check() {
-
         String temp = text.getText().toString();
         String current;
-        int n = temp.indexOf(".");
-
-        if(n != -1){
-            temp = temp.substring(0, n);
-        }
+        String dot = "";
 
         temp = temp.replaceAll(",", "");
+        int n = temp.indexOf(".");
+
+        // 소숫점을 찾았을 경우
+        if(n != -1){
+            // 소숫점 아래 문자열
+            dot = temp.substring(n, temp.length());
+
+            // 정수
+            temp = temp.substring(0, n-1);
+        }
 
         if(temp.length() > 6) {
             current = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
-            text.setText(current);
+            text.setText(current + dot);
         } else if(temp.length() > 3) {
             current = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
-            text.setText(current);
+            text.setText(current + dot);
         }
     }
 }
