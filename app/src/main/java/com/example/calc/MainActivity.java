@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private TextView text;
-    private double value1;
-    private double value2;
+    private double value;
     private char operator;
+    private double total = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,17 +86,26 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn_AC:
                 text.setText("0");
+                total = 0;
                 break;
 
             case R.id.btn_plus:
-                value1 = Double.parseDouble(current.replaceAll(",", ""));
+                value = Double.parseDouble(current.replaceAll(",", ""));
                 text.setText("");
+                total += value;
                 operator = '+';
                 break;
 
+            case R.id.btn_min:
+                value = Double.parseDouble(current.replaceAll(",", ""));
+                text.setText("");
+                total -= value;
+                operator = '-';
+                break;
+
             case R.id.btn_eq:
-                value2 = Double.parseDouble(current.replaceAll(",", ""));
-                result();
+                value = Double.parseDouble(current.replaceAll(",", ""));
+                result(value);
                 break;
 
         }
@@ -104,8 +113,18 @@ public class MainActivity extends AppCompatActivity {
         check();
     }
 
-    public void result() {
-        text.setText(Double.toString(value1+value2));
+    public void result(Double value) {
+        switch(operator) {
+            case '+':
+                total += value;
+                break;
+            case '-':
+                total -= value;
+                break;
+
+        }
+
+        text.setText(Double.toString(total));
     }
 
     // 소숫점 확인
