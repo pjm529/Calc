@@ -75,7 +75,11 @@ public class MainActivity extends AppCompatActivity {
                 text.setText(current + "9");
                 break;
             case R.id.btn_dot:
-                text.setText(current + ".");
+
+                if(checkDot()) {
+                    text.setText(current + ".");
+                }
+
                 break;
             case R.id.btn_AC:
                 text.setText("0");
@@ -97,6 +101,16 @@ public class MainActivity extends AppCompatActivity {
         check();
     }
 
+    public boolean checkDot(){
+        String current = text.getText().toString();
+
+        int n = current.indexOf(".");
+
+        if(n != -1)
+            return false;
+
+        return true;
+    }
     public void result() {
         text.setText("" + (value1 + value2));
     }
