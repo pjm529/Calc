@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_plus:
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if(init){
                     total = Double.parseDouble(current.replaceAll(",", ""));
                     init = false;
@@ -110,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_min:
+
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if(init){
                     total = Double.parseDouble(current.replaceAll(",", ""));
                     init = false;
@@ -122,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_mul:
+
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if(init){
                     total = Double.parseDouble(current.replaceAll(",", ""));
                     init = false;
@@ -134,6 +151,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_div:
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if(init){
                     total = Double.parseDouble(current.replaceAll(",", ""));
                     init = false;
@@ -146,10 +168,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_eq:
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 value = Double.parseDouble(current.replaceAll(",", ""));
                 calc(value);
 
-                System.out.println(total);
                 if(total > 999999999) {
                     Toast.makeText(this, "최대 숫자를 넘어섰습니다.", Toast.LENGTH_SHORT).show();
                     break;
@@ -248,4 +274,5 @@ public class MainActivity extends AppCompatActivity {
         }
         text.setText(temp + dot);
     }
+
 }
