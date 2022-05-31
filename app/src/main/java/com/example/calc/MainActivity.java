@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private char operator;
     private double total = 0;
     private boolean init = true;
+    private boolean result = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,15 @@ public class MainActivity extends AppCompatActivity {
         String current = text.getText().toString();
 
         // textview가 0이면 0지우고 숫자 입력
-        if(current.equals("0")) {
+        if(current.equals("0") && view.getId() != R.id.btn_dot ) {
             text.setText("");
             current = text.getText().toString();
+        }
+
+        if(result){
+            text.setText("");
+            current = text.getText().toString();
+            result = false;
         }
 
         // 최대 자릿 수 지정
@@ -79,12 +86,11 @@ public class MainActivity extends AppCompatActivity {
                 text.setText(current + "9");
                 break;
             case R.id.btn_dot:
-
                 if(checkDot()) {
                     text.setText(current + ".");
                 }
-
                 break;
+
             case R.id.btn_AC:
                 text.setText("0");
                 total = 0;
@@ -101,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 text.setText("");
                 operator = '+';
-
                 break;
 
             case R.id.btn_min:
@@ -142,12 +147,15 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.btn_eq:
                 value = Double.parseDouble(current.replaceAll(",", ""));
-                result(value);
+                calc(value);
                 init = true;
+                result = true;
+                rmZero(Double.toString(total));
                 break;
         }
 
         check();
+
     }
 
     public void calc(Double value) {
@@ -165,26 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 total /= value;
                 break;
         }
-    }
-
-    public void result(Double value) {
-        switch(operator) {
-            case '+':
-                total += value;
-                break;
-            case '-':
-                total -= value;
-                break;
-            case '*':
-                total *= value;
-                break;
-            case '/':
-                total /= value;
-                break;
-
-        }
-
-        text.setText(Double.toString(total));
     }
 
     // 소숫점 확인
@@ -214,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             dot = temp.substring(n, temp.length());
 
             // 정수
-            temp = temp.substring(0, n-1);
+            temp = temp.substring(0, n);
         }
 
         if(temp.length() > 6) {
@@ -224,5 +212,31 @@ public class MainActivity extends AppCompatActivity {
             current = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
             text.setText(current + dot);
         }
+    }
+
+    // 소수점 0 지우기
+    public void rmZero(String temp){
+        String dot = "";
+        int n = temp.indexOf(".");
+
+        // 소숫점을 찾았을 경우
+        if(n != -1){
+            // 소숫점 아래 문자열
+            dot = temp.substring(n, temp.length());
+
+            // 정수
+            temp = temp.substring(0, n);
+
+            if(dot.charAt(dot.length()-1) == '0') {
+                dot = dot.substring(0, dot.length()-1);
+
+                if (dot.equals(".")) {
+                    text.setText(temp);
+                    return;
+                }
+                rmZero(temp + dot);
+            }
+        }
+        text.setText(temp + dot);
     }
 }
