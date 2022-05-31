@@ -148,6 +148,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_eq:
                 value = Double.parseDouble(current.replaceAll(",", ""));
                 calc(value);
+
+                System.out.println(total);
+                if(total > 999999999) {
+                    Toast.makeText(this, "최대 숫자를 넘어섰습니다.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 init = true;
                 result = true;
                 rmZero(Double.toString(total));
@@ -208,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
         if(temp.length() > 6) {
             current = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
             text.setText(current + dot);
+
+
         } else if(temp.length() > 3) {
             current = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
             text.setText(current + dot);
