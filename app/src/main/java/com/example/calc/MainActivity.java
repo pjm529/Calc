@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private TextView text;
-    private double storedValue;
-    private char curOperator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         String current = text.getText().toString();
+
+        if(current.equals("0")) {
+            text.setText("");
+            current = text.getText().toString();
+        }
 
         switch (view.getId()) {
             case R.id.btn_0:
@@ -58,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_dot:
                 text.setText(current + ".");
                 break;
-
+            case R.id.btn_AC:
+                text.setText("0");
+                break;
         }
     }
 }
