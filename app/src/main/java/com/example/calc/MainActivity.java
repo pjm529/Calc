@@ -20,11 +20,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
+
+        // 현재 textview 값
         String current = text.getText().toString();
 
+        // textview가 0이면 0지우고 숫자 입력
         if(current.equals("0")) {
             text.setText("");
             current = text.getText().toString();
+        }
+
+        // 최대 자릿 수 지정
+        if(current.length() > 10 && view.getId() != R.id.btn_AC) {
+            Toast.makeText(this, "최대 숫자를 넘어섰습니다.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         switch (view.getId()) {
@@ -64,6 +73,26 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_AC:
                 text.setText("0");
                 break;
+        }
+
+        check();
+    }
+
+    // 숫자 변환기
+    public void check() {
+        String temp = text.getText().toString();
+        String current;
+
+        temp = temp.replaceAll(",", "");
+
+        if(temp.length() > 6) {
+            System.out.println(6);
+            current = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
+            text.setText(current);
+        } else if(temp.length() > 3) {
+            System.out.println(3);
+            current = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
+            text.setText(current);
         }
     }
 }
