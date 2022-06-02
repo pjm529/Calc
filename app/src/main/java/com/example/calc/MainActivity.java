@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(init){
                     total = Double.parseDouble(current.replaceAll(",", ""));
+                    System.out.println(total);
                     init = false;
                 } else {
                     value = Double.parseDouble(current.replaceAll(",", ""));
@@ -197,24 +198,20 @@ public class MainActivity extends AppCompatActivity {
                 rmZero(Double.toString(percent(current)));
 
             case R.id.btn_pm:
-
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
+                // 입력되어있는 숫자가 양수일 경우
                 if(current.substring(0, 1).equals("-")) {
                     current = current.substring(1, current.length());
                 } else {
                     current = "-" + current;
                 }
-
                 text.setText(current);
-
         }
-
         check();
-
     }
 
     // 계산
@@ -252,9 +249,19 @@ public class MainActivity extends AppCompatActivity {
         String temp = text.getText().toString();
         String current;
         String dot = "";
+        Boolean flag = true;
 
         temp = temp.replaceAll(",", "");
         int n = temp.indexOf(".");
+
+        // 입력된 값의 길이가 0 이상일 경우
+        if(temp.length() > 0) {
+            // 입력된 값이 음수인 경우
+            if(temp.substring(0,1).equals("-")){
+                temp = temp.substring(1, temp.length());
+                flag = false;
+            }
+        }
 
         // 소숫점을 찾았을 경우
         if(n != -1){
@@ -266,14 +273,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(temp.length() > 6) {
-            current = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
-            text.setText(current + dot);
-
+            temp = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
 
         } else if(temp.length() > 3) {
-            current = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
-            text.setText(current + dot);
+            temp = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
         }
+
+        // 입력된 값이 양수 일 경우
+        if(flag){
+            text.setText(temp + dot);
+        } else {
+            text.setText("-" + temp + dot);
+        }
+
     }
 
     // 소수점 0 지우기
