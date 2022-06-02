@@ -315,6 +315,7 @@
         android:background="@drawable/shape_for_circle_button"
         android:text="+/-"
         android:textSize="30sp"
+        android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintLeft_toLeftOf="parent"

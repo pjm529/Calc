@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private double total = 0;
     private boolean init = true;
     private boolean result = false;
+    private int flag = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_eq:
-                if(current.equals("")) {
+                if(current.equals("") || init) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -191,9 +192,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                init = false;
+                init = true;
                 result = false;
                 rmZero(Double.toString(percent(current)));
+
+            case R.id.btn_pm:
+
+                if(current.equals("")) {
+                    Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+                if(current.substring(0, 1).equals("-")) {
+                    current = current.substring(1, current.length());
+                } else {
+                    current = "-" + current;
+                }
+
+                text.setText(current);
 
         }
 
