@@ -8,20 +8,23 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    // 숫자가 입력될 TextView
     private TextView text;
+    // 값을 저장할 변수
     private double value;
+    // 사칙연산
     private char operator;
+    // 최종 결과를 담을 변수
     private double total = 0;
+    // 초기화가 된 상태 인지
     private boolean init = true;
+    // 결과를 출력해낸 상태인지
     private boolean result = false;
-    private int flag = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Calculator");
-
         text = findViewById(R.id.text);
     }
 
@@ -30,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
         // 현재 textview 값
         String current = text.getText().toString();
 
-        // textview가 0이면 0지우고 숫자 입력
+        // 입력된 버튼이 .이 아닐 경우 및 textview가 0이면 0지우고 숫자 입력
         if(current.equals("0") && view.getId() != R.id.btn_dot ) {
             text.setText("");
             current = text.getText().toString();
         }
 
+        // 결과가 출력된 상태이고 %버튼이 아닌경우
         if(result && view.getId() != R.id.btn_per){
             text.setText("");
             current = text.getText().toString();
@@ -87,89 +91,65 @@ public class MainActivity extends AppCompatActivity {
                 text.setText(current + "9");
                 break;
             case R.id.btn_dot:
+                // 소숫점 체크
                 if(checkDot()) {
                     text.setText(current + ".");
                 }
                 break;
 
             case R.id.btn_AC:
+                // 초기화
                 text.setText("0");
                 total = 0;
                 init = true;
                 break;
 
             case R.id.btn_plus:
+                // 입력된 숫자가 없을 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
-                if(init){
-                    total = Double.parseDouble(current.replaceAll(",", ""));
-                    System.out.println(total);
-                    init = false;
-                } else {
-                    value = Double.parseDouble(current.replaceAll(",", ""));
-                    calc(value);
-                }
-                text.setText("");
+                // 사칙연산
+                operation(current);
                 operator = '+';
                 break;
 
             case R.id.btn_min:
-
+                // 입력된 숫자가 없을 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
-                if(init){
-                    total = Double.parseDouble(current.replaceAll(",", ""));
-                    init = false;
-                } else {
-                    value = Double.parseDouble(current.replaceAll(",", ""));
-                    calc(value);
-                }
-                text.setText("");
+                // 사칙연산
+                operation(current);
                 operator = '-';
                 break;
 
             case R.id.btn_mul:
-
+                // 입력된 숫자가 없을 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
-                if(init){
-                    total = Double.parseDouble(current.replaceAll(",", ""));
-                    init = false;
-                } else {
-                    value = Double.parseDouble(current.replaceAll(",", ""));
-                    calc(value);
-                }
-                text.setText("");
+                // 사칙연산
+                operation(current);
                 operator = '*';
                 break;
 
             case R.id.btn_div:
+                // 입력된 숫자가 없을 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
-                if(init){
-                    total = Double.parseDouble(current.replaceAll(",", ""));
-                    init = false;
-                } else {
-                    value = Double.parseDouble(current.replaceAll(",", ""));
-                    calc(value);
-                }
-                text.setText("");
+                // 사칙연산
+                operation(current);
                 operator = '/';
                 break;
 
             case R.id.btn_eq:
+                // 입력된 숫자가 없거나 초기화 상태일 경우
                 if(current.equals("") || init) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
@@ -177,27 +157,32 @@ public class MainActivity extends AppCompatActivity {
 
                 value = Double.parseDouble(current.replaceAll(",", ""));
                 calc(value);
-
+                // 계산 된 값이 허용범위를 넘었을 경우
                 if(total > 999999999) {
                     Toast.makeText(this, "최대 숫자를 넘어섰습니다.", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
+                // 초기화 true
                 init = true;
+                // 결과 true
                 result = true;
+                //소숫점 마지막자리 0 제거
                 rmZero(Double.toString(total));
                 break;
 
             case R.id.btn_per:
+                // 입력된 숫자가 없거나 초기화 상태일 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 init = true;
                 result = false;
+                //소숫점 마지막자리 0 제거
                 rmZero(Double.toString(percent(current)));
 
             case R.id.btn_pm:
+                // 입력된 숫자가 없을 경우
                 if(current.equals("")) {
                     Toast.makeText(getApplicationContext(), "숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();
                     break;
@@ -211,7 +196,22 @@ public class MainActivity extends AppCompatActivity {
                 }
                 text.setText(current);
         }
-        check();
+        // 숫자변환
+        conversion();
+    }
+
+    // 사칙연산 전 확인
+    public void operation(String current){
+        // 초기화가 된 상태인 경우 먼저 total에 값을 넣는다
+        if(init){
+            total = Double.parseDouble(current.replaceAll(",", ""));
+            init = false;
+        } else {
+            // 초기화 상태가 아닌 경우 계산
+            value = Double.parseDouble(current.replaceAll(",", ""));
+            calc(value);
+        }
+        text.setText("");
     }
 
     // 계산
@@ -234,31 +234,37 @@ public class MainActivity extends AppCompatActivity {
 
     // 소숫점 확인
     public boolean checkDot(){
+        // 현재 입력된 값
         String current = text.getText().toString();
 
+        // .의 위치를 찾는다
         int n = current.indexOf(".");
 
+        // 소숫점이 없을 경우
         if(n != -1)
             return false;
 
+        // 소숫 점이 있을 경우
         return true;
     }
 
     // 숫자 변환기
-    public void check() {
-        String temp = text.getText().toString();
-        String current;
+    public void conversion() {
+        // 현재 입력된 숫자
+        String current = text.getText().toString();
+        // 소숫점 자리를 담을 변수
         String dot = "";
+        // true일 경우 양수
         Boolean flag = true;
 
-        temp = temp.replaceAll(",", "");
-        int n = temp.indexOf(".");
+        current = current.replaceAll(",", "");
+        int n = current.indexOf(".");
 
         // 입력된 값의 길이가 0 이상일 경우
-        if(temp.length() > 0) {
+        if(current.length() > 0) {
             // 입력된 값이 음수인 경우
-            if(temp.substring(0,1).equals("-")){
-                temp = temp.substring(1, temp.length());
+            if(current.substring(0,1).equals("-")){
+                current = current.substring(1, current.length());
                 flag = false;
             }
         }
@@ -266,62 +272,64 @@ public class MainActivity extends AppCompatActivity {
         // 소숫점을 찾았을 경우
         if(n != -1){
             // 소숫점 아래 문자열
-            dot = temp.substring(n, temp.length());
-
+            dot = current.substring(n, current.length());
             // 정수
-            temp = temp.substring(0, n);
+            current = current.substring(0, n);
         }
 
-        if(temp.length() > 6) {
-            temp = temp.substring(0, temp.length() - 6) + "," + temp.substring(temp.length() - 6, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
-
-        } else if(temp.length() > 3) {
-            temp = temp.substring(0, temp.length() - 3) + "," + temp.substring(temp.length() - 3, temp.length());
+        // 현재 값이 6자리보다 클 경우
+        if(current.length() > 6) {
+            current = current.substring(0, current.length() - 6) + "," + current.substring(current.length() - 6, current.length() - 3) + "," + current.substring(current.length() - 3, current.length());
+        // 현재 값이 3자리보다 클 경우
+        } else if(current.length() > 3) {
+            current = current.substring(0, current.length() - 3) + "," + current.substring(current.length() - 3, current.length());
         }
 
         // 입력된 값이 양수 일 경우
         if(flag){
-            text.setText(temp + dot);
+            text.setText(current + dot);
         } else {
-            text.setText("-" + temp + dot);
+            text.setText("-" + current + dot);
         }
 
     }
 
     // 소수점 0 지우기
-    public void rmZero(String temp){
+    public void rmZero(String current){
         String dot = "";
-        int n = temp.indexOf(".");
+        int n = current.indexOf(".");
 
         // 소숫점을 찾았을 경우
         if(n != -1){
             // 소숫점 아래 문자열
-            dot = temp.substring(n, temp.length());
+            dot = current.substring(n, current.length());
 
             // 정수
-            temp = temp.substring(0, n);
+            current = current.substring(0, n);
 
+            // 소숫점 마지막 자리가 0 일경우
             if(dot.charAt(dot.length()-1) == '0') {
-                dot = dot.substring(0, dot.length()-1);
+                // 마지막 자리를 지운다
+                dot = dot.substring(0, dot.length() - 1);
 
+                // 소숫점이 나온경우
                 if (dot.equals(".")) {
-                    text.setText(temp);
+                    // 정수만 출력
+                    text.setText(current);
                     return;
                 }
-                rmZero(temp + dot);
+                // 다시 검사를 위한 재귀함수
+                rmZero(current + dot);
             }
         }
-        text.setText(temp + dot);
+        text.setText(current + dot);
     }
 
-    //
+    // 퍼센트
     public double percent(String current) {
-
         current = current.replaceAll(",", "");
-
         double n = Double.parseDouble(current);
-
-        return n/100;
+        return n / 100;
     }
 
 }
