@@ -2,6 +2,7 @@ package com.example.calc;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 result = false;
                 //소숫점 마지막자리 0 제거
                 rmZero(Double.toString(percent(current)));
+                break;
 
             case R.id.btn_pm:
                 // 입력된 숫자가 없을 경우
@@ -195,9 +197,11 @@ public class MainActivity extends AppCompatActivity {
                     current = "-" + current;
                 }
                 text.setText(current);
+                break;
         }
         // 숫자변환
         conversion();
+
     }
 
     // 사칙연산 전 확인
