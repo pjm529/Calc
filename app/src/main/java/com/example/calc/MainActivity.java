@@ -21,12 +21,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean init = true;
     // 결과를 출력해낸 상태인지
     private boolean result = false;
+    // C버튼
+    private Button btn_C;
+    // AC버튼
+    private Button btn_AC;
+    // C버튼 클릭 횟수
+    private int click_C = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         text = findViewById(R.id.text);
+        btn_C = findViewById(R.id.btn_C);
+        btn_AC = findViewById(R.id.btn_AC);
     }
 
     public void onClick(View view) {
@@ -103,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 text.setText("0");
                 total = 0;
                 init = true;
+                click_C = 0;
                 break;
 
             case R.id.btn_plus:
@@ -114,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 // 사칙연산
                 operation(current);
                 operator = '+';
+                click_C = 0;
                 break;
 
             case R.id.btn_min:
@@ -125,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 // 사칙연산
                 operation(current);
                 operator = '-';
+                click_C = 0;
                 break;
 
             case R.id.btn_mul:
@@ -136,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 // 사칙연산
                 operation(current);
                 operator = '*';
+                click_C = 0;
                 break;
 
             case R.id.btn_div:
@@ -147,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 // 사칙연산
                 operation(current);
                 operator = '/';
+                click_C = 0;
                 break;
 
             case R.id.btn_eq:
@@ -167,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
                 init = true;
                 // 결과 true
                 result = true;
+                // C클릭 횟수 초기화
+                click_C = 0;
                 //소숫점 마지막자리 0 제거
                 rmZero(Double.toString(total));
                 break;
@@ -179,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 init = true;
                 result = false;
+                click_C = 0;
                 //소숫점 마지막자리 0 제거
                 rmZero(Double.toString(percent(current)));
                 break;
@@ -198,10 +214,23 @@ public class MainActivity extends AppCompatActivity {
                 }
                 text.setText(current);
                 break;
+
+            case R.id.btn_C:
+                click_C++;
+                text.setText("0");
+                break;
         }
         // 숫자변환
         conversion();
 
+        // 초기화 상태이거나 C버튼을 1번 클릭했을 경우 AC버튼 display.
+        if(init || click_C == 1) {
+            btn_C.setVisibility(View.GONE);
+            btn_AC.setVisibility(View.VISIBLE);
+        } else {
+            btn_AC.setVisibility(View.GONE);
+            btn_C.setVisibility(View.VISIBLE);
+        }
     }
 
     // 사칙연산 전 확인
@@ -284,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
         // 현재 값이 6자리보다 클 경우
         if(current.length() > 6) {
             current = current.substring(0, current.length() - 6) + "," + current.substring(current.length() - 6, current.length() - 3) + "," + current.substring(current.length() - 3, current.length());
-        // 현재 값이 3자리보다 클 경우
+            // 현재 값이 3자리보다 클 경우
         } else if(current.length() > 3) {
             current = current.substring(0, current.length() - 3) + "," + current.substring(current.length() - 3, current.length());
         }
